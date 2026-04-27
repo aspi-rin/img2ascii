@@ -32,8 +32,9 @@ app.on('window-all-closed', () => {
 })
 
 // Open image file dialog
-ipcMain.handle('open-image', async () => {
-  const result = await dialog.showOpenDialog({
+ipcMain.handle('open-image', async (event) => {
+  const win = BrowserWindow.fromWebContents(event.sender)
+  const result = await dialog.showOpenDialog(win, {
     title: 'Select Image',
     filters: [{ name: 'Images', extensions: ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp', 'tiff'] }],
     properties: ['openFile'],
@@ -48,8 +49,9 @@ ipcMain.handle('open-image', async () => {
 })
 
 // Save TXT
-ipcMain.handle('save-txt', async (_, text) => {
-  const result = await dialog.showSaveDialog({
+ipcMain.handle('save-txt', async (event, text) => {
+  const win = BrowserWindow.fromWebContents(event.sender)
+  const result = await dialog.showSaveDialog(win, {
     title: 'Save ASCII Art as Text',
     defaultPath: 'ascii-art.txt',
     filters: [{ name: 'Text Files', extensions: ['txt'] }],
@@ -60,8 +62,9 @@ ipcMain.handle('save-txt', async (_, text) => {
 })
 
 // Save PNG (receives base64 data URL from renderer canvas)
-ipcMain.handle('save-png', async (_, dataUrl) => {
-  const result = await dialog.showSaveDialog({
+ipcMain.handle('save-png', async (event, dataUrl) => {
+  const win = BrowserWindow.fromWebContents(event.sender)
+  const result = await dialog.showSaveDialog(win, {
     title: 'Save ASCII Art as Image',
     defaultPath: 'ascii-art.png',
     filters: [{ name: 'PNG Image', extensions: ['png'] }],

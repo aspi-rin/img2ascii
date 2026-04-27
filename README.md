@@ -2,8 +2,6 @@
 
 将图片转换为 ASCII 字符画的 Mac 桌面应用，基于 Electron 构建。
 
-![screenshot](https://user-images.githubusercontent.com/placeholder/screenshot.png)
-
 ## 运行
 
 ```bash
