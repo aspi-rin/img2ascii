@@ -1,0 +1,46 @@
+# ASCII Art Converter
+
+将图片转换为 ASCII 字符画的 Mac 桌面应用，基于 Electron 构建。
+
+![screenshot](https://user-images.githubusercontent.com/placeholder/screenshot.png)
+
+## 运行
+
+```bash
+npm install
+npm start
+```
+
+## 功能
+
+- 拖放或选择图片，生成 ASCII 字符画
+- 左右分栏对比：ASCII 渲染 vs 原图，中间分隔条可拖动调整比例
+- 底部控制栏：
+  - **分辨率**：调节列数（30–220）
+  - **对比度**：边界增强强度（1–6），越高边缘越锐利
+  - **字体大小**：仅影响显示，不影响渲染精度
+  - **字符集**：全字符 95 个 / 经典 / 简约 / 数字符号
+  - **反转**：切换明暗风格
+  - **保存 TXT / PNG**：导出 ASCII 文本或渲染图像
+
+## 渲染算法
+
+参考 [ASCII characters are not pixels: a deep dive into ASCII rendering](https://alexharri.com/blog/ascii-rendering)，核心思路是**形状向量匹配**而非简单的亮度映射。
+
+### 预计算阶段
+
+对字符集中每个字符，在离屏 Canvas 上渲染后，用 **6 个采样圆**（3 列 × 2 行，左列下移/右列上移错开排列）覆盖字符区域，各圆内像素平均亮度构成 6 维形状向量，逐分量归一化后缓存。
+
+### 渲染阶段
+
+图像按列数切分为若干 cell，每个 cell 用相同位置的 6 个采样圆计算采样向量，同时在 cell 外侧采集 6 个**外部采样向量**，然后依次应用：
+
+1. **方向性对比度增强** — 用 `max(内部, 外部)` 归一化后取指数幂，消除边界阶梯效应
+2. **全局对比度增强** — 对向量整体归一化后取指数幂，拉开明暗区域
+
+最后对 95 个字符做 **6 维欧氏距离最近邻查找**，选出形状最匹配的字符。
+
+### 比例修正
+
+- cell 高度用实际 CSS `line-height`（`fontSize × 1.2`）而非 em-square 高度计算，保证 ASCII 图与原图宽高比一致
+- 字符宽度使用 `measureText` 的原始浮点值（非 `Math.ceil`），避免取整误差累积导致纵向拉伸

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ASCII Art</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- title bar drag area -->
+  <div class="titlebar">
+    <span class="titlebar-title">ASCII Art</span>
+  </div>
+
+  <!-- main area -->
+  <div id="main">
+
+    <!-- drop zone (visible before image is loaded) -->
+    <div id="drop-zone">
+      <div class="drop-inner">
+        <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
+          <rect x="8" y="16" width="48" height="36" rx="4" stroke="#4da6ff" stroke-width="2"/>
+          <circle cx="22" cy="28" r="4" stroke="#4da6ff" stroke-width="2"/>
+          <path d="M8 40 L20 28 L30 38 L38 30 L56 40" stroke="#4da6ff" stroke-width="2" stroke-linejoin="round"/>
+          <path d="M32 8 L32 2 M32 2 L28 6 M32 2 L36 6" stroke="#4da6ff" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <p class="drop-title">拖放图片到这里</p>
+        <p class="drop-sub">或点击按钮选择文件</p>
+        <button id="upload-btn" class="btn-primary">选择图片</button>
+      </div>
+    </div>
+
+    <!-- split view (hidden until image loaded) -->
+    <div id="split-container">
+      <div id="split-left" class="hidden">
+        <div class="panel-label">ASCII</div>
+        <div class="scroll-area">
+          <pre id="ascii-output"></pre>
+        </div>
+      </div>
+
+      <div id="divider" class="hidden"></div>
+
+      <div id="split-right" class="hidden">
+        <div class="panel-label">原图</div>
+        <div class="scroll-area img-area">
+          <img id="original-img" alt="original" draggable="false" />
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- controls bar -->
+  <div id="controls" class="hidden">
+    <div class="controls-left">
+      <button id="upload-btn-2" class="btn-secondary" onclick="document.getElementById('upload-btn').click()">
+        换图片
+      </button>
+
+      <div class="ctrl-group">
+        <label>分辨率</label>
+        <input type="range" id="cols-slider" min="30" max="220" value="100" step="1" />
+        <span id="cols-value" class="val-badge">100</span>
+      </div>
+
+      <div class="ctrl-group">
+        <label>对比度</label>
+        <input type="range" id="contrast-slider" min="1" max="6" value="2.5" step="0.1" />
+        <span id="contrast-value" class="val-badge">2.5</span>
+      </div>
+
+      <div class="ctrl-group">
+        <label>字体大小</label>
+        <input type="range" id="font-size-slider" min="6" max="20" value="11" step="1" />
+        <span id="font-size-value" class="val-badge">11</span>
+      </div>
+
+      <div class="ctrl-group">
+        <label>字符集</label>
+        <select id="charset-select">
+          <option value="all">全字符 (95)</option>
+          <option value="classic">经典</option>
+          <option value="minimal">简约</option>
+          <option value="digits">数字符号</option>
+        </select>
+      </div>
+
+      <label class="toggle-label">
+        <input type="checkbox" id="invert-toggle" />
+        <span class="toggle-track"><span class="toggle-thumb"></span></span>
+        反转
+      </label>
+    </div>
+
+    <div class="controls-right">
+      <span id="status-msg" class="status-msg"></span>
+      <button id="save-txt-btn" class="btn-secondary">保存 TXT</button>
+      <button id="save-png-btn" class="btn-primary">保存 PNG</button>
+    </div>
+  </div>
+
+  <script src="renderer.js"></script>
+</body>
+</html>

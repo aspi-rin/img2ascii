@@ -1,0 +1,12 @@
+{
+  "name": "ascii-art-converter",
+  "version": "1.0.0",
+  "description": "Convert images to ASCII art",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "devDependencies": {
+    "electron": "^28.3.0"
+  }
+}
