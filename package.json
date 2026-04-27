@@ -4,9 +4,30 @@
   "description": "Convert images to ASCII art",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "dist": "electron-builder --mac"
   },
   "devDependencies": {
-    "electron": "^28.3.0"
+    "electron": "^28.3.0",
+    "electron-builder": "^26.8.1"
+  },
+  "build": {
+    "appId": "ai.trans-n.ascii-art",
+    "productName": "ASCII Art",
+    "mac": {
+      "category": "public.app-category.graphics-design",
+      "target": [
+        { "target": "dmg", "arch": ["universal"] },
+        { "target": "zip", "arch": ["universal"] }
+      ]
+    },
+    "files": [
+      "main.js",
+      "src/**/*",
+      "node_modules/**/*"
+    ],
+    "dmg": {
+      "title": "ASCII Art Converter"
+    }
   }
 }
