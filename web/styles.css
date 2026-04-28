@@ -258,5 +258,49 @@ select:focus { border-color: var(--fg-dim); }
   font-variant-numeric: tabular-nums;
 }
 
+/* ── Color swatches ── */
+.color-swatches { display: flex; gap: 5px; align-items: center; }
+.swatch {
+  width: 16px; height: 16px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: pointer;
+  padding: 0;
+  flex-shrink: 0;
+  transition: border-color 0.15s, transform 0.1s;
+}
+.swatch:hover  { transform: scale(1.2); }
+.swatch.active { border-color: #fff; }
+
+.swatch-picker {
+  background: none;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.swatch-picker::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: conic-gradient(
+    hsl(0,80%,60%), hsl(45,80%,60%), hsl(90,80%,60%),
+    hsl(135,80%,60%), hsl(180,80%,60%), hsl(225,80%,60%),
+    hsl(270,80%,60%), hsl(315,80%,60%), hsl(360,80%,60%)
+  );
+  pointer-events: none;
+}
+.swatch-picker input[type=color] {
+  opacity: 0;
+  position: absolute;
+  inset: 0;
+  width: 100%; height: 100%;
+  cursor: pointer;
+  border: none;
+  padding: 0;
+}
+
 /* ── Utility ── */
 .hidden { display: none !important; }

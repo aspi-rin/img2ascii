@@ -79,6 +79,21 @@
         </select>
       </div>
 
+      <div class="ctrl-group">
+        <label>颜色</label>
+        <div class="color-swatches" id="color-swatches">
+          <button class="swatch active" data-color="#4da6ff"       style="background:#4da6ff"           title="默认蓝"></button>
+          <button class="swatch"        data-color="rgb(249,172,200)" style="background:rgb(249,172,200)" title="粉红"></button>
+          <button class="swatch"        data-color="rgb(245,95,139)"  style="background:rgb(245,95,139)"  title="玫红"></button>
+          <button class="swatch"        data-color="rgb(230,104,92)"  style="background:rgb(230,104,92)"  title="珊瑚红"></button>
+          <button class="swatch"        data-color="rgb(200,228,202)" style="background:rgb(200,228,202)" title="薄荷绿"></button>
+          <button class="swatch"        data-color="rgb(215,206,150)" style="background:rgb(215,206,150)" title="麦黄"></button>
+          <label class="swatch swatch-picker" title="自定义颜色">
+            <input type="color" id="color-picker" value="#4da6ff" />
+          </label>
+        </div>
+      </div>
+
       <label class="toggle-label">
         <input type="checkbox" id="invert-toggle" />
         <span class="toggle-track"><span class="toggle-thumb"></span></span>

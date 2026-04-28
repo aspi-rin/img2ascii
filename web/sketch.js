@@ -55,6 +55,7 @@ const splitRight     = document.getElementById('split-right')
 const divider        = document.getElementById('divider')
 const fontSizeSlider = document.getElementById('font-size-slider')
 const fontSizeValue  = document.getElementById('font-size-value')
+const colorSwatches  = document.querySelectorAll('.swatch')
 
 // ---------------------------------------------------------------------------
 // Render scheduler — debounces slider changes, queues at most one pending job
@@ -173,6 +174,26 @@ fontSizeSlider.addEventListener('input', () => {
   asciiOutput.style.fontSize   = `${size}px`
   asciiOutput.style.lineHeight = `${size * 1.2}px`
   scheduleRender()
+})
+
+function applyFgColor(color) {
+  document.documentElement.style.setProperty('--fg', color)
+}
+
+colorSwatches.forEach(swatch => {
+  if (swatch.dataset.color) {
+    swatch.addEventListener('click', () => {
+      colorSwatches.forEach(s => s.classList.remove('active'))
+      swatch.classList.add('active')
+      applyFgColor(swatch.dataset.color)
+    })
+  }
+})
+
+const colorPicker = document.getElementById('color-picker')
+colorPicker.addEventListener('input', () => {
+  colorSwatches.forEach(s => s.classList.remove('active'))
+  applyFgColor(colorPicker.value)
 })
 
 // ---------------------------------------------------------------------------
