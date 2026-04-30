@@ -55,7 +55,9 @@ const splitRight     = document.getElementById('split-right')
 const divider        = document.getElementById('divider')
 const fontSizeSlider = document.getElementById('font-size-slider')
 const fontSizeValue  = document.getElementById('font-size-value')
-const colorSwatches  = document.querySelectorAll('.swatch')
+const colorSwatches   = document.querySelectorAll('.swatch')
+const hidePreviewBtn  = document.getElementById('hide-preview-btn')
+const showPreviewBtn  = document.getElementById('show-preview-btn')
 
 // ---------------------------------------------------------------------------
 // Render scheduler — debounces slider changes, queues at most one pending job
@@ -109,9 +111,8 @@ async function handleFile(file) {
 
   dropZone.classList.add('hidden')
   splitLeft.classList.remove('hidden')
-  splitRight.classList.remove('hidden')
-  divider.classList.remove('hidden')
   document.getElementById('controls').classList.remove('hidden')
+  setPreviewVisible(true)   // always show original on new image load
   statusMsg.textContent = '加载图片中…'
 
   const dataUrl = await new Promise(resolve => {
@@ -175,6 +176,33 @@ fontSizeSlider.addEventListener('input', () => {
   asciiOutput.style.lineHeight = `${size * 1.2}px`
   scheduleRender()
 })
+
+// ---------------------------------------------------------------------------
+// Preview panel toggle
+// ---------------------------------------------------------------------------
+function setPreviewVisible(visible) {
+  if (visible) {
+    splitRight.classList.remove('hidden')
+    splitRight.style.display = ''
+    divider.classList.remove('hidden')
+    divider.style.display = ''
+    splitLeft.style.width  = ''
+    splitLeft.style.height = ''
+    hidePreviewBtn.classList.remove('hidden')
+    showPreviewBtn.classList.add('hidden')
+  } else {
+    splitRight.style.display = 'none'
+    divider.style.display    = 'none'
+    splitLeft.style.width  = '100%'
+    splitLeft.style.height = '100%'
+    hidePreviewBtn.classList.add('hidden')
+    showPreviewBtn.classList.remove('hidden')
+  }
+  previewP5.resize()
+}
+
+hidePreviewBtn.addEventListener('click', () => setPreviewVisible(false))
+showPreviewBtn.addEventListener('click', () => setPreviewVisible(true))
 
 function applyFgColor(color) {
   document.documentElement.style.setProperty('--fg', color)
