@@ -197,19 +197,43 @@ colorPicker.addEventListener('input', () => {
 })
 
 // ---------------------------------------------------------------------------
-// Resizable divider
+// Resizable divider — mouse + touch, horizontal on desktop / vertical on mobile
 // ---------------------------------------------------------------------------
-let dragging = false
-divider.addEventListener('mousedown', e => { dragging = true; e.preventDefault() })
-document.addEventListener('mousemove', e => {
-  if (!dragging) return
+const mobileQuery = window.matchMedia('(max-width: 640px)')
+
+function applySplit(clientX, clientY) {
   const container = document.getElementById('split-container')
   const rect = container.getBoundingClientRect()
-  const pct = Math.max(20, Math.min(80, (e.clientX - rect.left) / rect.width * 100))
-  splitLeft.style.width  = `${pct}%`
-  splitRight.style.width = `${100 - pct}%`
+  if (mobileQuery.matches) {
+    const pct = Math.max(20, Math.min(80, (clientY - rect.top) / rect.height * 100))
+    splitLeft.style.height  = `${pct}%`
+    splitRight.style.height = `${100 - pct}%`
+  } else {
+    const pct = Math.max(20, Math.min(80, (clientX - rect.left) / rect.width * 100))
+    splitLeft.style.width  = `${pct}%`
+    splitRight.style.width = `${100 - pct}%`
+  }
+}
+
+let dragging = false
+
+// Mouse
+divider.addEventListener('mousedown', e => { dragging = true; e.preventDefault() })
+document.addEventListener('mousemove', e => { if (dragging) applySplit(e.clientX, e.clientY) })
+document.addEventListener('mouseup',   () => { dragging = false })
+
+// Touch
+divider.addEventListener('touchstart', e => { dragging = true; e.preventDefault() }, { passive: false })
+document.addEventListener('touchmove',  e => { if (dragging) applySplit(e.touches[0].clientX, e.touches[0].clientY) }, { passive: true })
+document.addEventListener('touchend',  () => { dragging = false })
+
+// Reset inline sizes when crossing the breakpoint to avoid stale overrides
+mobileQuery.addEventListener('change', () => {
+  splitLeft.style.width  = ''
+  splitRight.style.width = ''
+  splitLeft.style.height  = ''
+  splitRight.style.height = ''
 })
-document.addEventListener('mouseup', () => { dragging = false })
 
 // ---------------------------------------------------------------------------
 // Export — PNG uses offscreen canvas; both trigger <a download> click
